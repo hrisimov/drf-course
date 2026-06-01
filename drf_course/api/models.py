@@ -62,5 +62,32 @@ class Order(models.Model):
         on_delete=models.CASCADE,
     )
 
+    products = models.ManyToManyField(
+        Product,
+        through='OrderItem',
+        related_name='orders',
+    )
+
     def __str__(self):
         return f'Order {self.order_id} by {self.user.username}'
+
+
+class OrderItem(models.Model):
+    order = models.ForeignKey(
+        Order,
+        on_delete=models.CASCADE,
+    )
+
+    product = models.ForeignKey(
+        Product,
+        on_delete=models.CASCADE,
+    )
+
+    quantity = models.PositiveIntegerField()
+
+    @property
+    def item_subtotal(self):
+        return self.quantity * self.product.price
+
+    def __str__(self):
+        return f'{self.quantity} x {self.product.name} in Order {self.order.order_id}'
