@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from api.models import Product, Order
+from api.models import Product, Order, OrderItem
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -18,6 +18,15 @@ class ProductSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('Price must be greater than 0.')
 
         return value
+
+
+class OrderItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderItem
+        fields = (
+            'product',
+            'quantity',
+        )
 
 
 class OrderSerializer(serializers.ModelSerializer):
