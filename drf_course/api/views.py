@@ -13,11 +13,10 @@ class ProductListAPIView(generics.ListAPIView):
     serializer_class = ProductSerializer
 
 
-@api_view(['GET'])
-def product_detail(request, pk):
-    product = get_object_or_404(Product, pk=pk)
-    serializer = ProductSerializer(product)
-    return Response(serializer.data)
+class ProductDetailAPIView(generics.RetrieveAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    lookup_url_kwarg = 'product_id'
 
 
 @api_view(['GET'])
