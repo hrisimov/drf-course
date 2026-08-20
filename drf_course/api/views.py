@@ -1,5 +1,5 @@
 from django.db.models import Max
-from rest_framework import generics
+from rest_framework import generics, permissions
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
@@ -26,6 +26,7 @@ class OrderListAPIView(generics.ListAPIView):
 class UserOrderListAPIView(generics.ListAPIView):
     queryset = Order.objects.prefetch_related('items__product')
     serializer_class = OrderSerializer
+    permission_classes = (permissions.IsAuthenticated,)
 
     def get_queryset(self):
         queryset = super().get_queryset()
