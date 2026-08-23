@@ -1,5 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
+from django.urls import reverse
+from rest_framework import status
 
 from api.models import Order
 
@@ -29,3 +31,12 @@ class UserOrdersTestCase(TestCase):
         Order.objects.create(
             user=cls.user2,
         )
+
+    def test_get__when_user_is_authenticated__expect_to_return_only_his_orders(self):
+        self.client.force_login(self.user1)
+
+        response = self.client.get(reverse('user-orders'))
+
+        assert response.status_code == status.HTTP_200_OK
+        orders = response.json()
+        self.assertTrue(all(order['user'] == self.user1.pk for order in orders))
