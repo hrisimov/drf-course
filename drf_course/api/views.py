@@ -11,6 +11,12 @@ class ProductListCreateAPIView(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
+    def get_permissions(self):
+        if self.request.method == 'POST':
+            self.permission_classes = (permissions.IsAdminUser,)
+
+        return super().get_permissions()
+
 
 class ProductDetailAPIView(generics.RetrieveAPIView):
     queryset = Product.objects.all()
